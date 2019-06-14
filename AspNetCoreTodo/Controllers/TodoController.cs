@@ -13,15 +13,21 @@ namespace AspNetCoreTodo.Controllers
         // Get to-do items from database
       var item1 = new TodoItem
       {
-        Title = "Curso ASP.NET Core",
+        Title = "ASP.NET Core - MVC",
         DueAt = DateTimeOffset.Now.AddDays(1)
       };
       var item2 = new TodoItem
       {
-        Title = "Curso React",
-        DueAt = DateTimeOffset.Now.AddDays(2)
+        Title = "ASP.NET Core - Web Api",
+        DueAt = DateTimeOffset.Now.AddDays(1)
       };
-      var items = new[] { item1, item2 };
+      var item3 = new TodoItem
+      {
+        Title = "React",
+        DueAt = DateTimeOffset.Now.AddMonths(2)
+      };
+      var items = new[] { item1, item2, item3 };
+      
       // Put items into a model
       var model = new TodoViewModel()
       {
