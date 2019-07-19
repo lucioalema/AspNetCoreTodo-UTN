@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+// using AspNetCoreTodo.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AspNetCoreTodo.Services;
 
 namespace AspNetCoreTodo
 {
@@ -31,6 +36,12 @@ namespace AspNetCoreTodo
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // services.AddDbContext<ApplicationDbContext>(options =>
+            //     options.UseSqlite(
+            //         Configuration.GetConnectionString("DefaultConnection")));
+            // services.AddScoped<ITodoItemService, TodoItemService>();
+
+            services.AddSingleton<ITodoItemService, FakeTodoItemService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
