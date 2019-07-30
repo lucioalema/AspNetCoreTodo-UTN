@@ -6,6 +6,11 @@ namespace AspNetCoreTodo.Services
 {
     public class FakeTodoItemService : ITodoItemService
     {
+        public Task<bool> AddItemAsync(TodoItem newItem)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<TodoItem[]> GetIncompleteItemsAsync()
         {
             var item1 = new TodoItem
@@ -24,6 +29,11 @@ namespace AspNetCoreTodo.Services
                 DueAt = DateTimeOffset.Now.AddMonths(2)
             };
             return Task.FromResult(new[] { item1, item2, item3 });
+        }
+
+        public Task<bool> MarkDoneAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

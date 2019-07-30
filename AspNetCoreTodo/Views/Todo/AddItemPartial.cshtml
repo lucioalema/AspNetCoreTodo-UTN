@@ -1,0 +1,18 @@
+@model TodoItem
+    <form asp-action="AddItem" method="POST">
+        <div class="row">
+            <div class="col-sm">
+                <label asp-for="Title" class="control-label">Add a new item:</label>
+                <div class="input-group mb-3">
+                    <input asp-for="Title" type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" type="submit">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label asp-for="DueAt" class="control-label">Due At:</label>
+                <input asp-for="DueAt" id="datepicker" placeholder="dd/MM/yyyy" />
+            </div>
+        </div>
+    </form>
