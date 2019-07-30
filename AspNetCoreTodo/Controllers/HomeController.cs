@@ -17,13 +17,17 @@ namespace AspNetCoreTodo.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+            throw new Exception("Error en Accion Privacy");
+            // return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var exceptionHandlerPathFeature = 
+                HttpContext.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
+
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Path = exceptionHandlerPathFeature.Path });
         }
     }
 }
