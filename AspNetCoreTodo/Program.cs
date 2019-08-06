@@ -26,7 +26,7 @@ namespace AspNetCoreTodo
                 logging.AddConsole();
                 logging.AddDebug();
                 logging.AddEventSourceLogger();
-                // logging.AddNLog();
+                logging.AddNLog();
 
             })
             .UseStartup<Startup>();

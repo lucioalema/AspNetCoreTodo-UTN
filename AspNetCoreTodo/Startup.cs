@@ -39,6 +39,10 @@ namespace AspNetCoreTodo
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
+                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<ITodoItemService, TodoItemService>();
 
             // services.AddSingleton<ITodoItemService, FakeTodoItemService>();
@@ -47,7 +51,12 @@ namespace AspNetCoreTodo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<IdentityUser> userManager
+            )
         {
             if (env.IsDevelopment())
             {
@@ -70,6 +79,9 @@ namespace AspNetCoreTodo
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ApplicationDbInitializer.SeedRole(roleManager);
+            ApplicationDbInitializer.SeedUsers(userManager);
         }
     }
 }

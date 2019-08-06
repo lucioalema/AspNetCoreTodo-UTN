@@ -3,14 +3,16 @@ using System;
 using AspNetCoreTodo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AspNetCoreTodo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190806002844_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,15 +37,15 @@ namespace AspNetCoreTodo.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d1417003-6349-4f54-b458-05b1135f2d31"),
-                            DueAt = new DateTimeOffset(new DateTime(2019, 8, 6, 21, 49, 39, 696, DateTimeKind.Unspecified).AddTicks(127), new TimeSpan(0, -3, 0, 0, 0)),
+                            Id = new Guid("b97ca188-90a9-4093-bf92-27c5f4cfec24"),
+                            DueAt = new DateTimeOffset(new DateTime(2019, 8, 6, 21, 28, 43, 124, DateTimeKind.Unspecified).AddTicks(2113), new TimeSpan(0, -3, 0, 0, 0)),
                             IsDone = false,
                             Title = "Curso ASP.NET Core"
                         },
                         new
                         {
-                            Id = new Guid("d220bf10-820e-4c28-be81-383a7b886b49"),
-                            DueAt = new DateTimeOffset(new DateTime(2019, 8, 6, 21, 49, 39, 704, DateTimeKind.Unspecified).AddTicks(7198), new TimeSpan(0, -3, 0, 0, 0)),
+                            Id = new Guid("7c5d0f12-58b1-4c8d-8f7c-c1dfde78795b"),
+                            DueAt = new DateTimeOffset(new DateTime(2019, 8, 6, 21, 28, 43, 130, DateTimeKind.Unspecified).AddTicks(7391), new TimeSpan(0, -3, 0, 0, 0)),
                             IsDone = false,
                             Title = "Curso React"
                         });

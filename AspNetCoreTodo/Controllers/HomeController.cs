@@ -38,7 +38,11 @@ namespace AspNetCoreTodo.Controllers
                 .Get<IExceptionHandlerPathFeature>();
 
             logger.LogError($"La ruta {exceptionHandlerPathFeature.Path} " +
-            $"lanzo una excepcion {exceptionHandlerPathFeature.Error}");
+            $"lanzo una excepcion {exceptionHandlerPathFeature.Error} {DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss")}");
+
+            var loggerError = NLog.LogManager.GetLogger("error");
+            loggerError.Log(NLog.LogLevel.Error, $"La ruta {exceptionHandlerPathFeature.Path} " +
+             $"lanzo una excepcion {exceptionHandlerPathFeature.Error} {DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss")}");
 
             return View(new ErrorViewModel { 
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
