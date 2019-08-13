@@ -18,10 +18,11 @@ namespace AspNetCoreTodo.Services
             _context = context;
         }
 
-        public async Task<bool> AddItemAsync(TodoItem newItem)
+        public async Task<bool> AddItemAsync(TodoItem newItem, IdentityUser user)
         {
             newItem.Id = Guid.NewGuid();
             newItem.IsDone = false;
+            newItem.UserId = user.Id;
 
             _context.Items.Add(newItem);
 
@@ -36,10 +37,10 @@ namespace AspNetCoreTodo.Services
                 .ToArrayAsync();
         }
 
-        public async Task<bool> MarkDoneAsync(Guid id)
+        public async Task<bool> MarkDoneAsync(Guid id, IdentityUser user)
         {
             var item = await _context.Items
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id && x.UserId == user.Id);
             if (item == null) return false;
             item.IsDone = true;
 
