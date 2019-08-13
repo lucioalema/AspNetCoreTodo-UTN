@@ -19,16 +19,16 @@ namespace AspNetCoreTodo.Data
         {
             base.OnModelCreating(builder);
             
-            builder.Entity<TodoItem>().HasData(
-                new TodoItem {
-                    Id = Guid.NewGuid(),
-                    Title = "Curso ASP.NET Core",
-                    DueAt = DateTimeOffset.Now.AddDays(1)},
-                new TodoItem {
-                    Id = Guid.NewGuid(),
-                    Title = "Curso React",
-                    DueAt = DateTimeOffset.Now.AddDays(1)}
-                    );
+            // builder.Entity<TodoItem>().HasData(
+            //     new TodoItem {
+            //         Id = Guid.NewGuid(),
+            //         Title = "Curso ASP.NET Core",
+            //         DueAt = DateTimeOffset.Now.AddDays(1)},
+            //     new TodoItem {
+            //         Id = Guid.NewGuid(),
+            //         Title = "Curso React",
+            //         DueAt = DateTimeOffset.Now.AddDays(1)}
+            //         );
         }
     }
 }
