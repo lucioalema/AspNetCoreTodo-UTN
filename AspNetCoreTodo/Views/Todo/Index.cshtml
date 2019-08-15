@@ -10,6 +10,7 @@
 				<tr>
 					<th>&#x2714;</th>
 					<th>Item</th>
+					<th>Category</th>
 					<th>Due</th>
 				</tr>
 		  </thead>
@@ -23,20 +24,12 @@
                     </form>
 				</td>
 				<td>@item.Title</td>
+				<td>@item.Category.Name</td>
 				<td>@item.DueAt.Humanize()</td>
 			</tr>
 		  }
 	  </table>
   <div class="panel-footer add-item-form">
-	  @await Html.PartialAsync("AddItemPartial", new TodoItem())
+	  <a href="/Todo/AddItem" class="btn btn-primary">Add Item</a>
   </div>
 </div>
-
-@section Scripts{
-	<script type="text/javascript">
-		$('#datepicker').datepicker({
-			format: 'dd/mm/yyyy',
-			uiLibrary: 'bootstrap4'
-		});
-	</script>
-}

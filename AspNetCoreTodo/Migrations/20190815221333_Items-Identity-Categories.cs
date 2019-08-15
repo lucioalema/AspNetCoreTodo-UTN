@@ -3,20 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AspNetCoreTodo.Migrations
 {
-    public partial class Identity : Migration
+    public partial class ItemsIdentityCategories : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "Items",
-                keyColumn: "Id",
-                keyValue: new Guid("808c1504-7899-45c0-9369-5dc12a662429"));
-
-            migrationBuilder.DeleteData(
-                table: "Items",
-                keyColumn: "Id",
-                keyValue: new Guid("98ca59e2-4c74-4c57-b848-a8f77ee23a5c"));
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -54,6 +44,18 @@ namespace AspNetCoreTodo.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,8 +104,8 @@ namespace AspNetCoreTodo.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
@@ -147,8 +149,8 @@ namespace AspNetCoreTodo.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
+                    Name = table.Column<string>(maxLength: 128, nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -162,15 +164,37 @@ namespace AspNetCoreTodo.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Items",
-                columns: new[] { "Id", "DueAt", "IsDone", "Title" },
-                values: new object[] { new Guid("b97ca188-90a9-4093-bf92-27c5f4cfec24"), new DateTimeOffset(new DateTime(2019, 8, 6, 21, 28, 43, 124, DateTimeKind.Unspecified).AddTicks(2113), new TimeSpan(0, -3, 0, 0, 0)), false, "Curso ASP.NET Core" });
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsDone = table.Column<bool>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
+                    DueAt = table.Column<DateTimeOffset>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Items_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.InsertData(
-                table: "Items",
-                columns: new[] { "Id", "DueAt", "IsDone", "Title" },
-                values: new object[] { new Guid("7c5d0f12-58b1-4c8d-8f7c-c1dfde78795b"), new DateTimeOffset(new DateTime(2019, 8, 6, 21, 28, 43, 130, DateTimeKind.Unspecified).AddTicks(7391), new TimeSpan(0, -3, 0, 0, 0)), false, "Curso React" });
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("a0343d97-69d0-4084-a47c-2f617e48629f"), "Standard" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { new Guid("83515ed3-7b64-4d64-be7a-cff68ca4e197"), "Special" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -208,6 +232,11 @@ namespace AspNetCoreTodo.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_CategoryId",
+                table: "Items",
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -228,30 +257,16 @@ namespace AspNetCoreTodo.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Items");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DeleteData(
-                table: "Items",
-                keyColumn: "Id",
-                keyValue: new Guid("7c5d0f12-58b1-4c8d-8f7c-c1dfde78795b"));
-
-            migrationBuilder.DeleteData(
-                table: "Items",
-                keyColumn: "Id",
-                keyValue: new Guid("b97ca188-90a9-4093-bf92-27c5f4cfec24"));
-
-            migrationBuilder.InsertData(
-                table: "Items",
-                columns: new[] { "Id", "DueAt", "IsDone", "Title" },
-                values: new object[] { new Guid("808c1504-7899-45c0-9369-5dc12a662429"), new DateTimeOffset(new DateTime(2019, 7, 20, 20, 21, 36, 942, DateTimeKind.Unspecified).AddTicks(6868), new TimeSpan(0, -3, 0, 0, 0)), false, "Curso ASP.NET Core" });
-
-            migrationBuilder.InsertData(
-                table: "Items",
-                columns: new[] { "Id", "DueAt", "IsDone", "Title" },
-                values: new object[] { new Guid("98ca59e2-4c74-4c57-b848-a8f77ee23a5c"), new DateTimeOffset(new DateTime(2019, 7, 20, 20, 21, 36, 946, DateTimeKind.Unspecified).AddTicks(1648), new TimeSpan(0, -3, 0, 0, 0)), false, "Curso React" });
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

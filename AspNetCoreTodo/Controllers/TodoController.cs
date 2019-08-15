@@ -15,13 +15,16 @@ namespace AspNetCoreTodo.Controllers
   public class TodoController : Controller
   {
     private readonly ITodoItemService _todoItemService;
+    private readonly ICategoryService _categoryService;
     private readonly UserManager<IdentityUser> _userManager;
     public TodoController(
       ITodoItemService todoItemService,
+      ICategoryService categoryService,
       UserManager<IdentityUser> userManager
     )
     {
         _todoItemService = todoItemService;
+        _categoryService = categoryService;
         _userManager = userManager;
     }
     public async Task<IActionResult> Index()
@@ -42,8 +45,25 @@ namespace AspNetCoreTodo.Controllers
       return View(model);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> AddItem()
+    {
+      var currentUser = await _userManager.GetUserAsync(User);
+      if (currentUser == null) return Challenge();
+      var categories = await _categoryService.GetAsync();
+      
+      // Put items into a model
+      var model = new TodoItemAddViewModel()
+      {
+        Categories = categories.ToList()
+      };
+      // Render view using the model
+      return View(model);
+    }
+
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddItem(TodoItem newItem)
+    [HttpPost]
+    public async Task<IActionResult> AddItem(TodoItemAddViewModel model)
     {
       if (!ModelState.IsValid)
       {
@@ -53,6 +73,12 @@ namespace AspNetCoreTodo.Controllers
       var currentUser = await _userManager.GetUserAsync(User);
       if (currentUser == null) return Challenge();
 
+      var newItem = new TodoItem{
+        Id = model.Id,
+        Title = model.Title,
+        DueAt = model.DueAt,
+        Category = _categoryService.GetByIdAsync(model.CategoryId).Result
+      };
       var successful = await _todoItemService.AddItemAsync(newItem, currentUser);
 
       if (!successful)

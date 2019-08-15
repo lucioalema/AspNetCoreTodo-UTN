@@ -15,9 +15,21 @@ namespace AspNetCoreTodo.Data
         {
         }
         public DbSet<TodoItem> Items { get; set; }
+        public DbSet<Category> Categories { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Category>().HasData(
+                new Category{
+                    Id = Guid.NewGuid(),
+                    Name = "Standard"
+                },
+                new Category{
+                    Id = Guid.NewGuid(),
+                    Name = "Special"
+                }
+            );
             
             // builder.Entity<TodoItem>().HasData(
             //     new TodoItem {

@@ -14,6 +14,7 @@ using AspNetCoreTodo.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspNetCoreTodo.Services;
+using AspNetCoreTodo.Models;
 
 namespace AspNetCoreTodo
 {
@@ -37,13 +38,16 @@ namespace AspNetCoreTodo
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options
+                    .UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
+                    .UseLazyLoadingProxies()
+                );
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddScoped<ITodoItemService, TodoItemService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             // services.AddSingleton<ITodoItemService, FakeTodoItemService>();
 

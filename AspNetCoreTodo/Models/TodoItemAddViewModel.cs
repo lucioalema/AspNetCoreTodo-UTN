@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace AspNetCoreTodo.Models
 {
-    public class TodoItem
+    public class TodoItemAddViewModel
     {
         public Guid Id { get; set; }
         public bool IsDone { get; set; }
@@ -12,6 +13,8 @@ namespace AspNetCoreTodo.Models
         public string UserId { get; set; }
 
         [Required]
-        public virtual Category Category { get; set; }
+        public Guid CategoryId { get; set; }
+
+        public List<Category> Categories { get; set; }
     }
 }

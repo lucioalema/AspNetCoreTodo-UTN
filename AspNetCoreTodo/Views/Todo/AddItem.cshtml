@@ -1,0 +1,41 @@
+@model TodoItemAddViewModel
+@{
+  ViewData["Title"] = "Add Item";
+}
+<form asp-action="AddItem" method="POST">
+    <div class="row">
+        <div class="col-sm">
+            <label asp-for="Title" class="control-label">Add a new item:</label>
+            <input asp-for="Title" type="text" class="form-control" placeholder="Title" aria-label="Title">
+            <!-- <div class="input-group mb-3">
+                <input asp-for="Title" type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="submit">Add</button>
+                </div>
+            </div> -->
+        </div>
+        <div class="col-sm-6">
+            <label asp-for="DueAt" class="control-label">Due At:</label>
+            <input asp-for="DueAt" id="datepicker" placeholder="dd/MM/yyyy" autocomplete="off" />
+        </div>
+        <div class="col-sm-6">
+            <label asp-for="CategoryId" class="control-label">Category:</label>
+            <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" class="form-control"></select>
+        </div>        
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <a href="Index" class="btn btn-outline-secondary">Back</a>
+            <button class="btn btn-outline-success" type="submit">Add</button>
+        </div>
+    </div>
+</form>
+@section Scripts{
+	<script type="text/javascript">
+		$('#datepicker').datepicker({
+			format: 'dd/mm/yyyy',
+			uiLibrary: 'bootstrap4'
+		});
+	</script>
+}

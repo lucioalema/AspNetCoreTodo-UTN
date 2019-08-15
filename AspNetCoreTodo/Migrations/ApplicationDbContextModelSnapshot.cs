@@ -16,10 +16,38 @@ namespace AspNetCoreTodo.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+            modelBuilder.Entity("AspNetCoreTodo.Models.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a0343d97-69d0-4084-a47c-2f617e48629f"),
+                            Name = "Standard"
+                        },
+                        new
+                        {
+                            Id = new Guid("83515ed3-7b64-4d64-be7a-cff68ca4e197"),
+                            Name = "Special"
+                        });
+                });
+
             modelBuilder.Entity("AspNetCoreTodo.Models.TodoItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CategoryId");
 
                     b.Property<DateTimeOffset?>("DueAt");
 
@@ -31,6 +59,8 @@ namespace AspNetCoreTodo.Migrations
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Items");
                 });
@@ -194,6 +224,14 @@ namespace AspNetCoreTodo.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("AspNetCoreTodo.Models.TodoItem", b =>
+                {
+                    b.HasOne("AspNetCoreTodo.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

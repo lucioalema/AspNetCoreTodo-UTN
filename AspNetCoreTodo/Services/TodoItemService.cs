@@ -23,6 +23,7 @@ namespace AspNetCoreTodo.Services
             newItem.Id = Guid.NewGuid();
             newItem.IsDone = false;
             newItem.UserId = user.Id;
+            newItem.Category.Id = newItem.Category.Id;
 
             _context.Items.Add(newItem);
 

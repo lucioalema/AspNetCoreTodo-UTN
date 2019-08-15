@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreTodo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190806002844_Identity")]
-    partial class Identity
+    [Migration("20190815221333_Items-Identity-Categories")]
+    partial class ItemsIdentityCategories
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,10 +18,38 @@ namespace AspNetCoreTodo.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+            modelBuilder.Entity("AspNetCoreTodo.Models.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a0343d97-69d0-4084-a47c-2f617e48629f"),
+                            Name = "Standard"
+                        },
+                        new
+                        {
+                            Id = new Guid("83515ed3-7b64-4d64-be7a-cff68ca4e197"),
+                            Name = "Special"
+                        });
+                });
+
             modelBuilder.Entity("AspNetCoreTodo.Models.TodoItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CategoryId");
 
                     b.Property<DateTimeOffset?>("DueAt");
 
@@ -30,25 +58,13 @@ namespace AspNetCoreTodo.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Items");
+                    b.HasIndex("CategoryId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b97ca188-90a9-4093-bf92-27c5f4cfec24"),
-                            DueAt = new DateTimeOffset(new DateTime(2019, 8, 6, 21, 28, 43, 124, DateTimeKind.Unspecified).AddTicks(2113), new TimeSpan(0, -3, 0, 0, 0)),
-                            IsDone = false,
-                            Title = "Curso ASP.NET Core"
-                        },
-                        new
-                        {
-                            Id = new Guid("7c5d0f12-58b1-4c8d-8f7c-c1dfde78795b"),
-                            DueAt = new DateTimeOffset(new DateTime(2019, 8, 6, 21, 28, 43, 130, DateTimeKind.Unspecified).AddTicks(7391), new TimeSpan(0, -3, 0, 0, 0)),
-                            IsDone = false,
-                            Title = "Curso React"
-                        });
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -164,9 +180,11 @@ namespace AspNetCoreTodo.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -197,15 +215,25 @@ namespace AspNetCoreTodo.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("AspNetCoreTodo.Models.TodoItem", b =>
+                {
+                    b.HasOne("AspNetCoreTodo.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
