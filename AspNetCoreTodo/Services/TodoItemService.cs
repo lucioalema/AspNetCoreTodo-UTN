@@ -35,6 +35,7 @@ namespace AspNetCoreTodo.Services
         {
             return await _context.Items
                 .Where(x => !x.IsDone && x.UserId == user.Id)
+                //.Include(x => x.Category)
                 .ToArrayAsync();
         }
 
