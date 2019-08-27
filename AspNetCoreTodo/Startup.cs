@@ -58,6 +58,7 @@ namespace AspNetCoreTodo
         public void Configure(
             IApplicationBuilder app,
             IHostingEnvironment env,
+            ApplicationDbContext context,
             RoleManager<IdentityRole> roleManager,
             UserManager<IdentityUser> userManager
             )
@@ -86,8 +87,7 @@ namespace AspNetCoreTodo
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            ApplicationDbInitializer.SeedRole(roleManager);
-            ApplicationDbInitializer.SeedUsers(userManager);
+            ApplicationDbInitializer.Initialize(context, roleManager, userManager);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreTodo.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,19 @@ namespace AspNetCoreTodo.Data
 {
     public static class ApplicationDbInitializer
     {
-        public static void SeedRole(RoleManager<IdentityRole> roleManager)
+        public static void Initialize(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        {
+            if (!context.Roles.Any())
+                SeedRole(roleManager);
+            if (!context.Users.Any())
+                SeedUsers(userManager);
+            if (!context.Categories.Any())
+                SeedCategories(context);
+            if (!context.Items.Any())
+                SeedTodoItems(context, userManager);
+        }
+
+        private static void SeedRole(RoleManager<IdentityRole> roleManager)
         {
             if (roleManager.Roles
                 .Where(x => x.Name == Constants.AdministratorRole)
@@ -25,7 +38,7 @@ namespace AspNetCoreTodo.Data
             IdentityResult result = roleManager.CreateAsync(testAdmin).Result;
         }
 
-        public static void SeedUsers(UserManager<IdentityUser> userManager)
+        private static void SeedUsers(UserManager<IdentityUser> userManager)
         {
             if (userManager.Users
                 .Where(x => x.UserName == "admin@todo.local")
@@ -44,6 +57,47 @@ namespace AspNetCoreTodo.Data
             {
                 userManager.AddToRoleAsync(testAdmin, Constants.AdministratorRole).Wait();
             }
+        }
+
+        private static void SeedCategories(ApplicationDbContext context)
+        {
+            context.AddRange(new List<Category>
+            {
+                new Category{
+                    Id = Guid.NewGuid(),
+                    Name = "Standard"
+                },
+                new Category{
+                    Id = Guid.NewGuid(),
+                    Name = "Special"
+                }
+            });
+            context.SaveChanges();
+        }
+
+        private static void SeedTodoItems(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        {
+            var user = userManager.Users
+                .Where(x => x.UserName == "admin@todo.local")
+                .SingleOrDefaultAsync().Result;
+            context.AddRange(new List<TodoItem>
+            {
+                new TodoItem {
+                    Id = Guid.NewGuid(),
+                    Title = "Curso ASP.NET Core",
+                    DueAt = DateTimeOffset.Now.AddDays(1),
+                    Category = context.Categories.FirstOrDefault(x => x.Name == "Standard"),
+                    UserId = user.Id
+                },
+                new TodoItem {
+                    Id = Guid.NewGuid(),
+                    Title = "Curso React",
+                    DueAt = DateTimeOffset.Now.AddDays(1),
+                    Category = context.Categories.FirstOrDefault(x => x.Name == "Special"),
+                    UserId = user.Id
+                }
+            });
+            context.SaveChanges();
         }
     }
 }
