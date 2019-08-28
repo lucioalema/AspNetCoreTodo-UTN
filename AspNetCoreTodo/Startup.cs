@@ -39,7 +39,8 @@ namespace AspNetCoreTodo
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options
-                    .UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
+                    .UseInMemoryDatabase("InMemoryDb")
+                    //.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
                     .UseLazyLoadingProxies()
                 );
             services.AddDefaultIdentity<IdentityUser>()

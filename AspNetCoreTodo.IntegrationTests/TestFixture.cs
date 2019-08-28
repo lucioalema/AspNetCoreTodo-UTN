@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using Xunit;
@@ -15,7 +16,7 @@ namespace AspNetCoreTodo.IntegrationTests
         public TestFixture()
         {
             var builder = new WebHostBuilder()
-            .UseStartup<Startup>()
+                .UseStartup<Startup>()
             .ConfigureAppConfiguration((context, config) =>
             {
                 config.SetBasePath(Path.Combine(
